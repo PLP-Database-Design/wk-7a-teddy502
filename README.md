@@ -39,7 +39,14 @@ Task:
 
 - In the table above, the **Products column** contains multiple values, which violates **1NF**.
 - **Write an SQL query** to transform this table into **1NF**, ensuring that each row represents a single product for an order
-
+SELECT 
+    OrderID, 
+    CustomerName, 
+    TRIM(value) AS Product 
+FROM 
+    ProductDetail
+CROSS APPLY 
+    STRING_SPLIT(Products, ',');
 --- 
 
 ### Question 2 Achieving 2NF (Second Normal Form) 🧩
@@ -57,7 +64,13 @@ Task:
 
 - In the table above, the **CustomerName** column depends on **OrderID** (a partial dependency), which violates **2NF**. 
 
-- Write an SQL query to transform this table into **2NF** by removing partial dependencies. Ensure that each non-key column fully depends on the entire primary key.
+- Write an SQL query to transform this table into **2NF** by removing partial dependencies. Ensure that each non-key column fully depends on the entire primary key. 
+CREATE TABLE Orders AS
+SELECT DISTINCT OrderID, CustomerName
+FROM OrderDetails;
 
+CREATE TABLE OrderProducts AS
+SELECT OrderID, Product, Quantity
+FROM OrderDetails;
 ---
 Good luck 🚀
